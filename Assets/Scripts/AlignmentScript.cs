@@ -7,51 +7,69 @@ public class AlignmentScript : MonoBehaviour
 
     public Transform target1;
     public Transform target2;
-	public int exercise = 1;
+    public Transform targetCam;
+    public Transform targetHead;
+    public int exercise = 1;
 
+    // Exercise 2
     private float offsetAngle;
     private Vector3 offsetAxis;
     private float angleTemp = 0f;
-    //private float startAngle = 0f;
+    private Quaternion startRotation;
+    private float rotationSpeed = 0.1f;
+    Quaternion offsetRotation;
+    Quaternion offsetHeadToCam;
 
-    // Use this for initialization
     void Start ()
     {
-        Quaternion offsetRotation = transform.rotation* Quaternion.Inverse(target1.rotation);
-        offsetRotation.ToAngleAxis(out offsetAngle, out offsetAxis);
+        // Exercise 2
+        //Quaternion offsetRotation = transform.rotation * Quaternion.Inverse(target1.rotation);
+        //offsetRotation.ToAngleAxis(out offsetAngle, out offsetAxis);
+        //startRotation = target1.rotation;
 
-        Vector3 temp;
-        target1.rotation.ToAngleAxis(out angleTemp, out temp);
+        // Exercise 3
+        //offsetRotation = target1.rotation * Quaternion.Inverse(transform.rotation);
+        offsetRotation = targetCam.rotation * Quaternion.Inverse(transform.rotation);
+        offsetHeadToCam = targetCam.rotation * Quaternion.Inverse(targetHead.rotation);
 
+        switch (exercise)
+        {
+            case 4:
+                {
+
+                }
+                break;
+        }
     }
+
 
     void Update()
     {
         switch(exercise)
         {
             case 1:
-            {
-                Exercise1();
-            }
-            break;
+                {
+                    Exercise1();
+                }
+                break;
 
             case 2:
-            {
-                Exercise2();
-            }
-            break;
+                {
+                    Exercise2();
+                }
+                break;
 
             case 3:
-            {
-            
-            }
-            break;
+                {
+                    Exercise3();
+                }
+                break;
 
             case 4:
-            {
+                {
 
-            }
-            break;
+                }
+                break;
         }
     }
 
@@ -82,9 +100,39 @@ public class AlignmentScript : MonoBehaviour
         //  - Use method Transform.Rotate
 
 
-        if (angleTemp < offsetAngle)
-            angleTemp += 0.1f;
-        target1.rotation = Quaternion.AngleAxis(angleTemp, offsetAxis);
+        offsetRotation = transform.rotation * Quaternion.Inverse(target1.rotation);
+        offsetRotation.ToAngleAxis(out offsetAngle, out offsetAxis);
+        startRotation = target1.rotation;
+
+        if (Mathf.Abs(offsetAngle) > 0.01f)
+        {
+            angleTemp = Mathf.Clamp(offsetAngle, -rotationSpeed, rotationSpeed);
+            target1.rotation = Quaternion.AngleAxis(angleTemp, offsetAxis) * startRotation; // Option 1
+            // target1.Rotate(offsetAxis, angleTemp, Space.World); // Option 2
+        }
+        
+    }
+
+    private void Exercise3()
+    {
+        // 1. Make target1 follow tracker local rotations, if tracker rotates on the X axis, target should rotate
+        //    on its own X axis
+        //target1.rotation = offsetRotation * transform.rotation;
+
+        // 2.Imagine “tracker” is an HMD tracker, and rotate the camera while keeping the offset.
+        targetCam.rotation = offsetRotation * transform.rotation;
+
+        // 3. Now we want to apply it also to the robot’s head. But be careful!
+        //    The robot’s head axis doesn’t match camera axis, we need to rotate the head on the camera axis, not it’s own. 
+        //targetHead.rotation = offsetRotation * transform.rotation * offsetHeadToCam;
+        targetHead.rotation = offsetRotation * transform.rotation * offsetHeadToCam;
+    }
+
+    private void Exercise4()
+    {
+        // Make target2 follow the transformations of target1, but in such a way that it is aligned with the tracker
+        // How can you find the right offset?
+
 
     }
 
