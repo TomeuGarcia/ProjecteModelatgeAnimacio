@@ -18,7 +18,7 @@ public class AlignmentScript : MonoBehaviour
     private Quaternion startRotation;
     private float rotationSpeed = 0.1f;
     Quaternion offsetRotation;
-    Quaternion offsetHeadToCam;
+    Quaternion offsetCamToHead;
 
     void Start ()
     {
@@ -30,7 +30,7 @@ public class AlignmentScript : MonoBehaviour
         // Exercise 3
         //offsetRotation = target1.rotation * Quaternion.Inverse(transform.rotation);
         offsetRotation = targetCam.rotation * Quaternion.Inverse(transform.rotation);
-        offsetHeadToCam = targetCam.rotation * Quaternion.Inverse(targetHead.rotation);
+        offsetCamToHead = targetHead.rotation * Quaternion.Inverse(targetCam.rotation);
 
         switch (exercise)
         {
@@ -124,8 +124,8 @@ public class AlignmentScript : MonoBehaviour
 
         // 3. Now we want to apply it also to the robot’s head. But be careful!
         //    The robot’s head axis doesn’t match camera axis, we need to rotate the head on the camera axis, not it’s own. 
-        //targetHead.rotation = offsetRotation * transform.rotation * offsetHeadToCam;
-        targetHead.rotation = offsetRotation * transform.rotation * offsetHeadToCam;
+        targetHead.rotation = targetCam.rotation * offsetCamToHead;
+        
     }
 
     private void Exercise4()
