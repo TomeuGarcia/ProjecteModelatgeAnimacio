@@ -527,7 +527,7 @@ MonoBehaviour:
   target2: {fileID: 1208794890}
   targetCam: {fileID: 678872686}
   targetHead: {fileID: 609041569}
-  exercise: 3
+  exercise: 4
 --- !u!1 &1208794884
 GameObject:
   m_ObjectHideFlags: 0

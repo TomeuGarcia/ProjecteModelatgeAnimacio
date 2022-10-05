@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AlignmentScript : MonoBehaviour
 {
 
@@ -20,20 +21,25 @@ public class AlignmentScript : MonoBehaviour
     Quaternion offsetRotation;
     Quaternion offsetCamToHead;
 
+    MyQuaternion offsetRotationTrT1;
+    MyQuaternion offsetRotationT1T2;
+
     void Start ()
     {
         // Exercise 2
         //Quaternion offsetRotation = transform.rotation * Quaternion.Inverse(target1.rotation);
         //offsetRotation.ToAngleAxis(out offsetAngle, out offsetAxis);
         //startRotation = target1.rotation;
-
-        // Exercise 3
-        //offsetRotation = target1.rotation * Quaternion.Inverse(transform.rotation);
-        offsetRotation = targetCam.rotation * Quaternion.Inverse(transform.rotation);
-        offsetCamToHead = targetHead.rotation * Quaternion.Inverse(targetCam.rotation);
+        
 
         switch (exercise)
         {
+            case 3:
+                {
+                    offsetRotation = targetCam.rotation * Quaternion.Inverse(transform.rotation);
+                    offsetCamToHead = targetHead.rotation * Quaternion.Inverse(targetCam.rotation);
+                }
+                break;
             case 4:
                 {
 
@@ -67,7 +73,7 @@ public class AlignmentScript : MonoBehaviour
 
             case 4:
                 {
-
+                    Exercise4();
                 }
                 break;
         }
@@ -133,7 +139,14 @@ public class AlignmentScript : MonoBehaviour
         // Make target2 follow the transformations of target1, but in such a way that it is aligned with the tracker
         // How can you find the right offset?
 
+        Debug.Log(target1.rotation * target2.rotation);
+        Debug.Log((MyQuaternion.FromUnityQuaternion(target1.rotation)* MyQuaternion.FromUnityQuaternion(target2.rotation)).ToString());
 
+        Debug.Log(target1.rotation * Quaternion.Inverse(target2.rotation));
+        Debug.Log((MyQuaternion.FromUnityQuaternion(target1.rotation) * MyQuaternion.Inverse(MyQuaternion.FromUnityQuaternion(target2.rotation))).ToString());
+        
+        Debug.Log(Quaternion.AngleAxis(30f, Vector3.right));
+        Debug.Log(MyQuaternion.FromAxisAngle(Vector3.right, 30f).ToString());
     }
 
 }
