@@ -42,7 +42,7 @@ public class AlignmentScript : MonoBehaviour
                 break;
             case 4:
                 {
-
+                    Exercise4();
                 }
                 break;
         }
@@ -73,7 +73,7 @@ public class AlignmentScript : MonoBehaviour
 
             case 4:
                 {
-                    Exercise4();
+                    //Exercise4();
                 }
                 break;
         }
@@ -139,14 +139,26 @@ public class AlignmentScript : MonoBehaviour
         // Make target2 follow the transformations of target1, but in such a way that it is aligned with the tracker
         // How can you find the right offset?
 
+        Debug.Log("FromUnityQuaternion");
         Debug.Log(target1.rotation * target2.rotation);
         Debug.Log((MyQuaternion.FromUnityQuaternion(target1.rotation)* MyQuaternion.FromUnityQuaternion(target2.rotation)).ToString());
 
+        Debug.Log("Inverse");
         Debug.Log(target1.rotation * Quaternion.Inverse(target2.rotation));
         Debug.Log((MyQuaternion.FromUnityQuaternion(target1.rotation) * MyQuaternion.Inverse(MyQuaternion.FromUnityQuaternion(target2.rotation))).ToString());
-        
-        Debug.Log(Quaternion.AngleAxis(30f, Vector3.right));
-        Debug.Log(MyQuaternion.FromAxisAngle(Vector3.right, 30f).ToString());
+
+        Debug.Log("FromAxisAngle");
+        Debug.Log(Quaternion.AngleAxis(73f, Vector3.right));
+        Debug.Log(MyQuaternion.FromAxisAngle(new MyVector3(1,0,0), 73f).ToString());
+
+        Debug.Log("ToAxisAngle");
+        Vector3 axis;
+        float angle;
+        target1.rotation.ToAngleAxis(out angle, out axis);
+        Debug.Log(axis + " " + angle);
+        MyVector3 axis2;
+        MyQuaternion.FromUnityQuaternion(target1.rotation).ToAxisAngle(out axis2, out angle);
+        Debug.Log(axis2.ToString() + " " + angle);
     }
 
 }

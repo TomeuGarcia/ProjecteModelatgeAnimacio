@@ -68,9 +68,9 @@ public class MyQuaternion
     }
 
 
-    public static MyQuaternion FromAxisAngle(Vector3 axis, float angle) ///// INCORRECT
+    public static MyQuaternion FromAxisAngle(MyVector3 axis, float angle)
     {
-        float halfAngle = angle / 2f;
+        float halfAngle = (angle / 2f) * Mathf.Deg2Rad;
         float x = axis.x * Mathf.Sin(halfAngle);
         float y = axis.y * Mathf.Sin(halfAngle);
         float z = axis.z * Mathf.Sin(halfAngle);
@@ -79,11 +79,11 @@ public class MyQuaternion
         return new MyQuaternion(x, y, z, w).Normalize();
     }
 
-    public void ToAxisAngle(out Vector3 axis, out float angle)
+    public void ToAxisAngle(out MyVector3 axis, out float angle)
     {
         float v = Mathf.Sqrt(1f - (w * w));
-        axis = new Vector3(x / v, x / v, x / v);
-        angle = 2f * Mathf.Acos(w);
+        axis = new MyVector3(x / v, y / v, z / v);
+        angle = 2f * Mathf.Acos(w) * Mathf.Rad2Deg;
     }
 
 }
