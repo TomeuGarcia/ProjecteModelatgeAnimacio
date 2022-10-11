@@ -20,7 +20,7 @@ public class angleConstraints : MonoBehaviour
 
     void Start()
     {
-        twistAxis =Vector3.up;
+        twistAxis = Vector3.up;
     }
 
     void LateUpdate()
@@ -36,12 +36,12 @@ public class angleConstraints : MonoBehaviour
 
     private void ClampRotation()
     {
-        Quaternion qTwist = new Quaternion(twistAxis.x* transform.localRotation.x, 
+        Quaternion qTwist = new Quaternion(twistAxis.x * transform.localRotation.x, 
                                            twistAxis.y * transform.localRotation.y, 
                                            twistAxis.z * transform.localRotation.z, 
                                            transform.localRotation.w).normalized;
 
-        Quaternion qSwing = Quaternion.Inverse(qTwist) * transform.localRotation;
+        Quaternion qSwing = transform.localRotation * Quaternion.Inverse(qTwist);
 
 
         float angle;
