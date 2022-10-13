@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 58
+  controlID: 44
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 116
+  controlID: 112
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 57
+  controlID: 102
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 49
+  controlID: 103
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -367,22 +367,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/IK/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/IK/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\tomeu.garcia\Documents\GitKraken\ProjecteModelatgeAnimacio
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 025b0000
-    m_LastClickedID: 23298
-    m_ExpandedIDs: 00000000525a0000
+    m_SelectedIDs: 44660000
+    m_LastClickedID: 26180
+    m_ExpandedIDs: 00000000525a0000be65000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -435,9 +435,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 70d3ffff
-    m_LastClickedInstanceID: -11408
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: e86e0000
+    m_LastClickedInstanceID: 28392
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -538,9 +538,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 0cfbffff38fbffffa4590000c4590000
+      m_SelectedIDs: e86e0000
+      m_LastClickedID: 28392
+      m_ExpandedIDs: d6dfffff70e0ffff32e8ffff3ee8ffff38fbffffe86e0000166f0000286f0000466f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -789,9 +789,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -4.619809, y: -1.7044888, z: 2.865222}
+    m_Target: {x: -9.996594, y: -0.7315674, z: -0.32742158}
     speed: 2
-    m_Value: {x: -4.619809, y: -1.7044888, z: 2.865222}
+    m_Value: {x: -9.996594, y: -0.7315674, z: -0.32742158}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -838,13 +838,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.1568711, y: 0.645302, z: -0.13774791, w: -0.7348617}
+    m_Target: {x: -0.10606543, y: 0.71108943, z: -0.10987076, w: -0.6863497}
     speed: 2
-    m_Value: {x: -0.15686958, y: 0.64529574, z: -0.13774659, w: -0.7348546}
+    m_Value: {x: -0.106063016, y: 0.7110732, z: -0.10986826, w: -0.6863341}
   m_Size:
-    m_Target: 4.3393
+    m_Target: 6.501112
     speed: 2
-    m_Value: 4.3393
+    m_Value: 6.501112
   m_Ortho:
     m_Target: 0
     speed: 2
