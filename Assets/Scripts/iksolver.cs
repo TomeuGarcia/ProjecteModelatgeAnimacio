@@ -84,7 +84,7 @@ public class iksolver : MonoBehaviour {
 					Vector3 axis = Vector3.Cross(r1, r2).normalized;
 
 					// find the angle between r1 and r2 (and clamp values if needed avoid errors)
-					_theta[i] = Mathf.Acos(_cos[i]);
+					_theta[i] = Mathf.Acos(Mathf.Clamp(_cos[i], -1f, 1f));
 
 					//Optional. correct angles if needed, depending on angles invert angle if sin component is negative
 					if (_sin[i] < 0.0f)

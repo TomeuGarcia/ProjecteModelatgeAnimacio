@@ -68,6 +68,7 @@ namespace ENTICourse.IK
 
             return ClampAngle(angle);
         }
+
         public float SetAngle(float angle)
         {
             angle = ClampAngle(angle);

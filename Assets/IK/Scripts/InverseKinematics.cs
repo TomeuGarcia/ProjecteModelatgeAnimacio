@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace ENTICourse.IK
 {
-
     // A typical error function to minimise
     public delegate float ErrorFunction(Vector3 target, float[] solution);
 
@@ -36,7 +35,7 @@ namespace ENTICourse.IK
     {
         [Header("Joints")]
         public Transform BaseJoint;
-       
+
 
         [ReadOnly]
         public RobotJoint[] Joints = null;
@@ -99,39 +98,49 @@ namespace ENTICourse.IK
 
             target = Destination.position;
             DistanceFromDestination = ErrorFunction(target, Solution);
-            Debug.Log(DistanceFromDestination);
            
             if (DistanceFromDestination > StopThreshold)
+            {
                 ApproachTarget(target);
+            }
 
             if (DebugDraw)
             {
                 Debug.DrawLine(Effector.transform.position, target, Color.green);
                 Debug.DrawLine(Destination.transform.position, target, new Color(0, 0.5f, 0));
             }
+
+            
         }
 
         public void ApproachTarget(Vector3 target)
         {
-            //TODO
+            //TODO (done)
+            // Update rotations
+            for (int i = 0; i < Solution.Length; ++i)
+            {
+                Solution[i] = Solution[i] - (LearningRate * CalculateGradient(target, Solution, i, DeltaGradient));
+            }
 
-           
+            // Aplly rotations
+            for (int i = 0; i < Joints.Length; i++)
+            {
+                Joints[i].MoveArm(Solution[i]);
+            }
         }
 
         
         public float CalculateGradient(Vector3 target, float[] Solution, int i, float delta)
-        {           
-            //TODO (Tomeu: I don't even know if this does what it is supposed to do)
-            float deltaAngle = delta * Solution[i];
+        {
+            //TODO
+            // (Tomeu: I don't even know if this does what it is supposed to do)
 
-            float[] solutionDelta = Solution;
-            solutionDelta[i] += deltaAngle;
+            Solution[i] += delta; // Temporaraly get delta solution
+            float deltaDistamceFromTarget = DistanceFromTarget(target, Solution);
 
-            float gradient = (DistanceFromTarget(target, solutionDelta) - DistanceFromTarget(target, Solution)) / deltaAngle;
+            Solution[i] -= delta; // Reset Solution
 
-
-
-            return gradient;
+            return (deltaDistamceFromTarget - DistanceFromTarget(target, Solution)) / delta;
         }
 
         // Returns the distance from the target, given a solution
@@ -154,15 +163,24 @@ namespace ENTICourse.IK
             Quaternion rotation = transform.rotation;
 
             //TODO (done)
-            for (int i = 0; i < Solution.Length; ++i)
+            for (int i = 0; i < Solution.Length - 1; ++i)
             {
-                rotation = Quaternion.AngleAxis(Solution[i], Joints[i].Axis) * rotation;
-                prevPoint += rotation * Joints[i].StartOffset;
+                Vector3 prev = prevPoint;
+
+                rotation = rotation * Quaternion.AngleAxis(Solution[i], Joints[i].Axis);
+
+                prevPoint += rotation * Joints[i + 1].StartOffset;
+
+                Debug.DrawLine(prevPoint, prev, Color.blue);
             }
 
 
             // The end of the effector
             return new PositionRotation(prevPoint, rotation);
         }
+
     }
+
+
+
 }
