@@ -33,8 +33,8 @@ public class IK_FABRIK2 : MonoBehaviour
             copy[i] = joints[i].position;
         }
 
-        //done = TODO
-        //done = 
+        // TODO (done)
+        done = false;
 
         if (!done)
         {
@@ -46,15 +46,14 @@ public class IK_FABRIK2 : MonoBehaviour
                 // The target is unreachable
                 done = true;
 
-                for (int i = 0; i < copy.Length-1; ++i)
+                for (int i = 0; i < copy.Length-2; ++i)
                 {
                     // Find the distance between the target and the joint
                     float targetToJointDist = Vector3.Distance(target.position, copy[i]);
                     float ratio = distances[i] / targetToJointDist;
 
-                    // Find the new joint positions
-                    joints[i + 1].position = ((1f - ratio) * copy[i]) + (ratio * copy[i + 1]);
-
+                    // Find the new joint position
+                    joints[i + 1].position = Vector3.Lerp(copy[i], target.position, ratio);
                 }
 
             }
@@ -62,37 +61,63 @@ public class IK_FABRIK2 : MonoBehaviour
             {
                 // The target is reachable
 
-                Vector3 initialJoint0Pos = copy[0];
+                // Store root joint's initial position
+                Vector3 rootJointInitialPos = copy[0];
 
-                //while (TODO)
-                float endEffectorTargetDist = Vector3.Distance(copy[copy.Length-1], target.position);
-                float tolerance = 0.1f;
+                // TODO (done)
+                // Check wether the distance between the end effector and the target is greater than tolerance
+                float tolerance = 0.05f;
+                float endEffectorToRootDistance = Vector3.Distance(copy[copy.Length - 1], target.position);
 
-                while (endEffectorTargetDist > tolerance)
+                while (endEffectorToRootDistance > tolerance)
                 {
                     // STAGE 1: FORWARD REACHING
-                    //TODO
+                    //TODO (done)
+
                     // Set end effector as target
                     copy[copy.Length - 1] = target.position;
+
                     for (int i = copy.Length-2; i >= 0; --i)
                     {
-                        // Find the distance between the new joint position and the current joint
-                        Vector3 jointDir = copy[i] - copy[i + 1];
+                        // Find the distance between the new joint position (i+1) and the current joint (i)
                         float distanceJoints = Vector3.Distance(copy[i], copy[i + 1]);
+                        float ratio = distances[i] / distanceJoints;
 
-                        float t = distances[i] / distanceJoints;
+                        // Find the new joint position
+                        copy[i] = Vector3.Lerp(copy[i + 1], copy[i], ratio);
                     }
 
 
                     // STAGE 2: BACKWARD REACHING
-                    //TODO
+                    //TODO (done)
+
+                    // Set the root its initial position
+                    copy[0] = rootJointInitialPos;
+
+                    for (int i = 0; i < copy.Length -2; ++i)
+                    {
+                        // Find the distance between the new joint position (i+1) and the current joint (i)
+                        float distanceJoints = Vector3.Distance(copy[i], copy[i + 1]);
+                        float ratio = distances[i] / distanceJoints;
+
+                        // Find the new joint position
+                        copy[i] = Vector3.Lerp(copy[i], copy[i + 1], ratio);
+                    }
+
+                    endEffectorToRootDistance = Vector3.Distance(copy[copy.Length - 1], target.position); // Recompute
                 }
+
+                done = true;
+
             }
 
             // Update original joint rotations
             for (int i = 0; i <= joints.Length - 2; i++)
             {
-               //TODO 
+                //TODO 
+                Vector3 from = joints[i].forward;
+                Vector3 to = copy[i] - joints[i].position;
+                joints[i].rotation = Quaternion.FromToRotation(from, to);
             }          
         }
     }
