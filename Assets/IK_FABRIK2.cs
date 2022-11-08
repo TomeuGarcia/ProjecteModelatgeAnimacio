@@ -43,10 +43,11 @@ public class IK_FABRIK2 : MonoBehaviour
             // Update joint positions
             if (targetRootDist > distances.Sum())
             {
+                
                 // The target is unreachable
                 done = true;
 
-                for (int i = 0; i < copy.Length-2; ++i)
+                for (int i = 0; i < joints.Length-2; ++i)
                 {
                     // Find the distance between the target and the joint
                     float targetToJointDist = Vector3.Distance(target.position, copy[i]);
@@ -55,7 +56,7 @@ public class IK_FABRIK2 : MonoBehaviour
                     // Find the new joint position
                     joints[i + 1].position = Vector3.Lerp(copy[i], target.position, ratio);
                 }
-
+                
             }
             else
             {
@@ -66,10 +67,10 @@ public class IK_FABRIK2 : MonoBehaviour
 
                 // TODO (done)
                 // Check wether the distance between the end effector and the target is greater than tolerance
-                float tolerance = 0.05f;
-                float endEffectorToRootDistance = Vector3.Distance(copy[copy.Length - 1], target.position);
+                float tolerance = 0.1f;
+                float targetToEndEffectorDistance = Vector3.Distance(copy[copy.Length - 1], target.position);
 
-                while (endEffectorToRootDistance > tolerance)
+                while (targetToEndEffectorDistance > tolerance)
                 {
                     // STAGE 1: FORWARD REACHING
                     //TODO (done)
@@ -94,17 +95,17 @@ public class IK_FABRIK2 : MonoBehaviour
                     // Set the root its initial position
                     copy[0] = rootJointInitialPos;
 
-                    for (int i = 0; i < copy.Length -2; ++i)
+                    for (int i = 1; i < copy.Length; ++i)
                     {
                         // Find the distance between the new joint position (i+1) and the current joint (i)
-                        float distanceJoints = Vector3.Distance(copy[i], copy[i + 1]);
-                        float ratio = distances[i] / distanceJoints;
+                        float distanceJoints = Vector3.Distance(copy[i-1], copy[i]);
+                        float ratio = distances[i-1] / distanceJoints;
 
                         // Find the new joint position
-                        copy[i] = Vector3.Lerp(copy[i], copy[i + 1], ratio);
+                        copy[i] = Vector3.Lerp(copy[i-1], copy[i], ratio);
                     }
 
-                    endEffectorToRootDistance = Vector3.Distance(copy[copy.Length - 1], target.position); // Recompute
+                    targetToEndEffectorDistance = Vector3.Distance(copy[copy.Length - 1], target.position); // Recompute
                 }
 
                 done = true;
@@ -112,14 +113,38 @@ public class IK_FABRIK2 : MonoBehaviour
             }
 
             // Update original joint rotations
-            for (int i = 0; i <= joints.Length - 2; i++)
+            for (int i = 0; i < joints.Length-1; i++)
             {
                 //TODO 
-                Vector3 from = joints[i].forward;
-                Vector3 to = copy[i] - joints[i].position;
-                joints[i].rotation = Quaternion.FromToRotation(from, to);
+
+                Vector3 oldDir = (joints[i + 1].position - joints[i].position).normalized;
+                Vector3 newDir = (copy[i + 1] - copy[i]).normalized;
+
+                Vector3 axis = Vector3.Cross(oldDir, newDir).normalized;
+                float angle = Mathf.Acos(Vector3.Dot(oldDir, newDir)) * Mathf.Rad2Deg;
+
+                //joints[i].rotation = Quaternion.AngleAxis(angle, axis) * joints[i].rotation;
+                joints[i].position = copy[i];
             }          
         }
+
+        
+        
     }
+
+    private void OnDrawGizmos()
+    {
+        if (copy == null) return;
+
+        Gizmos.color = Color.red;
+        for (int i = 0; i < copy.Length; i++)
+        {
+
+            Gizmos.DrawSphere(copy[i], 0.2f);
+        }
+
+            
+    }
+
 
 }
