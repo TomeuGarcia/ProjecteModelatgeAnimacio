@@ -12,6 +12,9 @@ public class IK_FABRIK2 : MonoBehaviour
     private float[] distances;
     private bool done;
 
+    private float angleThreshold = 1f;
+
+
     void Start()
     {
         distances = new float[joints.Length - 1];
@@ -45,15 +48,14 @@ public class IK_FABRIK2 : MonoBehaviour
             if (targetRootDist > distances.Sum())
             {         
                 // The target is unreachable
-                for (int i = 1; i < joints.Length-1; ++i)
+                for (int i = 0; i < joints.Length -1; ++i)
                 {
                     // Find the distance between the target and the joint
                     float targetToJointDist = Vector3.Distance(target.position, copy[i]);
                     float ratio = distances[i] / targetToJointDist;
 
                     // Find the new joint position
-                    //copy[i] = Vector3.Lerp(copy[i], target.position, ratio);
-                    copy[i] = (1 - ratio) * copy[i] + ratio * target.position;
+                    copy[i+1] = (1 - ratio) * copy[i] + ratio * target.position;
 
                 }
 
@@ -67,10 +69,9 @@ public class IK_FABRIK2 : MonoBehaviour
 
                 // TODO (done)
                 // Check wether the distance between the end effector and the target is greater than tolerance
-                float tolerance = 0.1f;
+                float tolerance = 0.05f;
                 float targetToEndEffectorDistance = Vector3.Distance(copy[copy.Length - 1], target.position);
 
-                int itcount = 0;
                 while (targetToEndEffectorDistance > tolerance)
                 {
                     // STAGE 1: FORWARD REACHING
@@ -86,7 +87,6 @@ public class IK_FABRIK2 : MonoBehaviour
                         float ratio = distances[i] / distanceJoints;
 
                         // Find the new joint position
-                        //copy[i] = Vector3.Lerp(copy[i + 1], copy[i], ratio);
                         copy[i] = (1 - ratio) * copy[i + 1] + ratio * copy[i];
                     }
 
@@ -105,13 +105,10 @@ public class IK_FABRIK2 : MonoBehaviour
                         float ratio = distances[i-1] / distanceJoints;
 
                         // Find the new joint position
-                        //copy[i] = Vector3.Lerp(copy[i-1], copy[i], ratio);
                         copy[i] = (1 - ratio) * copy[i - 1] + ratio * copy[i];
                     }
 
                     targetToEndEffectorDistance = Vector3.Distance(copy[copy.Length - 1], target.position); // Recompute
-
-                    Debug.Log(itcount++);
                 }
 
                 done = true;
@@ -129,8 +126,12 @@ public class IK_FABRIK2 : MonoBehaviour
                 Vector3 axis = Vector3.Cross(oldDir, newDir).normalized;
                 float angle = Mathf.Acos(Vector3.Dot(oldDir, newDir)) * Mathf.Rad2Deg;
 
-                //joints[i].rotation = Quaternion.AngleAxis(angle, axis) * joints[i].rotation;
-                joints[i].position = copy[i];
+                if (angle > angleThreshold)
+                {
+                    joints[i].rotation = Quaternion.AngleAxis(angle, axis) * joints[i].rotation;
+                }
+                    
+                //joints[i].position = copy[i];
             }          
         }
 
